@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 78f8407e99d4e5c429efba7e2da230f7
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Raleway Black
+  fontNames:
+  - Raleway Black
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5c05ff5265c57c74297ed25cd2f477c4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
