@@ -1,0 +1,32 @@
+{
+    "_maxStepsAmount": 1,
+    "_timeLimit": 3,
+    "_initialGrid": [
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        },
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        }
+    ],
+    "_expectedGrid": [
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        },
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        }
+    ]
+}
