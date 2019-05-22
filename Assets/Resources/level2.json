@@ -1,5 +1,5 @@
 {
-    "_maxStepsAmount": 100,
+    "_maxStepsAmount": 5,
     "_timeLimit": 100,
 	"_isFistHasOffset": false,
     "_initialGrid": [

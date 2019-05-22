@@ -1,12 +1,18 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.UI.Interface;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class InterfaceController : MonoBehaviour
+public class InterfaceController : MonoBehaviour, IInterface
 {
 	#region Editor Fields
 	[SerializeField] private GameObject _pausePanel;
-
+	[SerializeField] private GameObject _wonPanel;
+	[SerializeField] private GameObject _losePanel;
+	[SerializeField] private TextMeshProUGUI _currentCount;
+	[SerializeField] private TextMeshProUGUI _maxCount;
 	#endregion
 
 	#region Private Fields
@@ -22,6 +28,22 @@ public class InterfaceController : MonoBehaviour
 	public void PressPauseButton()
 	{
 		_pausePanel.SetActive(true);
+	}
+
+	public void ShowGameOverPanel()
+	{
+		_losePanel.SetActive(true);
+	}
+
+	public void ShowWonPanel()
+	{
+		_wonPanel.SetActive(true);
+	}
+
+	public void UpdateStepsCounter(int maxCount, int currentCount)
+	{
+		_currentCount.text = currentCount.ToString();
+		_maxCount.text = maxCount.ToString();
 	}
 	#endregion
 

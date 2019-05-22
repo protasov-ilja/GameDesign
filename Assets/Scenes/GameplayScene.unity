@@ -4398,6 +4398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbb1c883c20cf44ea36097c221f5420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interfaceController: {fileID: 2029778093}
+  _levelManager: {fileID: 110323461}
 --- !u!1 &1129262428
 GameObject:
   m_ObjectHideFlags: 0
@@ -7790,6 +7792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelsManager: {fileID: 1375375902}
+  _levelManager: {fileID: 110323461}
   _cellPrefab: {fileID: 5031361772920521383, guid: 92f295e9bbce38f44a906c2921dada45,
     type: 3}
   _coinPrefab: {fileID: 8114840206849479538, guid: 6fa8accb4a2631b408bfdac6e0dfdc55,
@@ -7913,6 +7916,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pausePanel: {fileID: 1520648556}
+  _wonPanel: {fileID: 247662119}
+  _losePanel: {fileID: 1384457261}
+  _currentCount: {fileID: 1944368881}
+  _maxCount: {fileID: 477190556}
 --- !u!1 &2034998979
 GameObject:
   m_ObjectHideFlags: 0

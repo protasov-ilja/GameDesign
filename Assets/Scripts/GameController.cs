@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Objects;
 using UnityEngine;
 
 namespace Assers.Scripts
@@ -6,7 +7,8 @@ namespace Assers.Scripts
 	public class GameController : MonoBehaviour
 	{
 		#region Editor Fields
-
+		[SerializeField] private InterfaceController _interfaceController;
+		[SerializeField] private LevelManager _levelManager;
 
 
 		#endregion
@@ -20,6 +22,7 @@ namespace Assers.Scripts
 		#region Unity Methods
 		private void Awake()
 		{
+			_levelManager.LinkToUI(_interfaceController);
 			//DataSaver.DataSave(1);
 		}
 		#endregion

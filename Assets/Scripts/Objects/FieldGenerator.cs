@@ -11,6 +11,7 @@ namespace Assets.Scripts
 	{
 		[Header("Links")]
 		[SerializeField] private LevelsManager _levelsManager;
+		[SerializeField] private LevelManager _levelManager;
 		[SerializeField] private GameObject _cellPrefab;
 		[SerializeField] private GameObject _coinPrefab;
 
@@ -49,6 +50,7 @@ namespace Assets.Scripts
 		public void CreateField(int level)
 		{
 			var levelData = _levelsManager.Levels[level];
+			_levelManager.CurrLevelData = levelData;
 			var dataGrid = levelData.InitialGrid;
 			_isOffsetInFistRow = levelData.IsFirstHasOffset;
 

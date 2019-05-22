@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Controllers;
 using Assets.Scripts.Objects.Enums;
+using Assets.Scripts.UI.Interface;
 using Assets.Scripts.Utils.LoadedObjects;
 using System;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Objects
 
 		private Vector3 startPosition;
 
-		private LevelData CurrLevelData { get; set; }
+		public LevelData CurrLevelData { get; set; }
 		private Camera _mainCamera;
 
 		private bool _isCoinCatched = false;
@@ -27,8 +28,11 @@ namespace Assets.Scripts.Objects
 
 		private int _maxStepsCount = 0;
 		private int _currentStepsCount = 0;
+		private bool _isGameEnd = false;
 
-		public event Action<int> CounterUpdated;
+		public event Action<int, int> CounterUpdated;
+		public event Action GameWon;
+		public event Action GameOver;
 
 		private void Awake()
 		{
@@ -38,11 +42,19 @@ namespace Assets.Scripts.Objects
 			_playerController.TouchEnd += EndDragin;
 		}
 
-		//public LinkToUI(ICounterDisplayer displayer)
-		//{
+		private void Start()
+		{
+			_maxStepsCount = CurrLevelData.MaxStepsAmount;
+			_currentStepsCount = 0;
+			CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
+		}
 
-
-		//}
+		public void LinkToUI(IInterface displayer)
+		{
+			CounterUpdated += displayer.UpdateStepsCounter;
+			GameWon += displayer.ShowWonPanel;
+			GameOver += displayer.ShowGameOverPanel;
+		}
 
 		public void CreateLevel(LevelData data)
 		{
@@ -51,6 +63,8 @@ namespace Assets.Scripts.Objects
 
 		public void StartDraging(Vector3 position)
 		{
+			if (_isGameEnd) return;
+
 			startPosition = _mainCamera.ScreenToWorldPoint(position);
 
 			Ray ray = _mainCamera.ScreenPointToRay(position);
@@ -100,7 +114,22 @@ namespace Assets.Scripts.Objects
 					_catchedCell.State = CellState.Available;
 					_catchedCell.Coin = null;
 					_fieldGenerator.IndicateBlockedStates();
-					Debug.Log($"<color=red> { _fieldGenerator.IsGridsEqual() }</color>");
+					if (_fieldGenerator.IsGridsEqual())
+					{
+						GameWon?.Invoke();
+						_isGameEnd = true;
+					}
+
+					if (_maxStepsCount <= _currentStepsCount)
+					{
+						GameOver?.Invoke();
+						_isGameEnd = true;
+					}
+					else
+					{
+						_currentStepsCount++;
+						CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
+					}
 				}
 				else
 				{
