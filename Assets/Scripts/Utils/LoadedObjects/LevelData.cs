@@ -12,11 +12,18 @@ namespace Assets.Scripts.Utils.LoadedObjects
 		[SerializeField] private bool _isFistHasOffset;
 		[SerializeField] private List<CellRow> _initialGrid;
 		[SerializeField] private List<CellRow> _expectedGrid;
+		[SerializeField] private bool _isFistImagRowHasOffset;
 
 		public bool IsFirstHasOffset
 		{
 			get => _isFistHasOffset;
 			set => _isFistHasOffset = value;
+		}
+
+		public bool IsFirstImageRowHasOffset
+		{
+			get => _isFistImagRowHasOffset;
+			set => _isFistImagRowHasOffset = value;
 		}
 
 		public int MaxStepsAmount

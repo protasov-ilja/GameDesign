@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Controllers;
 using Assets.Scripts.Objects.Enums;
 using Assets.Scripts.Utils.LoadedObjects;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Objects
@@ -22,7 +23,12 @@ namespace Assets.Scripts.Objects
 		private Coin _catchedCoin;
 		private Cell _catchedCell;
 
-		private Vector3 _previousPosition; 
+		private Vector3 _previousPosition;
+
+		private int _maxStepsCount = 0;
+		private int _currentStepsCount = 0;
+
+		public event Action<int> CounterUpdated;
 
 		private void Awake()
 		{
@@ -31,6 +37,12 @@ namespace Assets.Scripts.Objects
 			_playerController.TouchContinue += ContinueDragin;
 			_playerController.TouchEnd += EndDragin;
 		}
+
+		//public LinkToUI(ICounterDisplayer displayer)
+		//{
+
+
+		//}
 
 		public void CreateLevel(LevelData data)
 		{
@@ -88,6 +100,7 @@ namespace Assets.Scripts.Objects
 					_catchedCell.State = CellState.Available;
 					_catchedCell.Coin = null;
 					_fieldGenerator.IndicateBlockedStates();
+					Debug.Log($"<color=red> { _fieldGenerator.IsGridsEqual() }</color>");
 				}
 				else
 				{

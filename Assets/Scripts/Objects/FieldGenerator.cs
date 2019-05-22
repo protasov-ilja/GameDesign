@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Enums;
-
+using Assets.Scripts.UI.Interface;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +23,8 @@ namespace Assets.Scripts
 
 		[SerializeField] private float _stepHeight;
 		[SerializeField] private float _stepWidth;
+		[SerializeField] private float _uiStepHeight;
+		[SerializeField] private float _uiStepWidth;
 
 		[Header("Colors")]
 		[SerializeField] private Color _activeCellColor;
@@ -34,7 +36,8 @@ namespace Assets.Scripts
 		[SerializeField] private Color _activeCoinColor;
 
 		private List<List<Cell>> _cells = new List<List<Cell>>();
-		private List<List<Cell>> _expectedImage = new List<List<Cell>>();
+		private List<List<UICell>> _expectedImage = new List<List<UICell>>();
+
 		private bool _isOffsetInFistRow;
 
 		private void Awake()
@@ -90,39 +93,55 @@ namespace Assets.Scripts
 				_cells.Add(rowOfCells);
 			}
 
-			//var expectedGrid = levelData.ExpectedGrid;
-			//_expectedImage = new List<List<Cell>>();
-			//var uiPrefabPosition = _uiCellPrefab.transform.position;
+			var expectedGrid = levelData.ExpectedGrid;
+			_expectedImage = new List<List<UICell>>();
+			var uiPrefabPosition = _uiCellPrefab.transform.position;
+			var offsetGridUI = _uiField.transform as RectTransform;
+			var startPointX =(_uiField.transform as RectTransform).position.x - offsetGridUI.sizeDelta.x / 4;
+			var startPointY = (_uiField.transform as RectTransform).position.y + offsetGridUI.sizeDelta.y / 4;
 
-			//for (var i = 0; i < expectedGrid.Count; ++i)
-			//{
-			//	var row = expectedGrid[i].CellsList;
-			//	var listOfCells = new List<Cell>();
-			//	for (var j = 0; j < row.Count; ++j)
-			//	{
-			//		var offset = 0f;
-			//		if (i % 2 == 0)
-			//		{
-			//			offset += _uiCellPrefab.transform.lossyScale.x / 2;
-			//		}
+			var uiStepWidth = (_uiCellPrefab.transform as RectTransform).sizeDelta.x / 2;
+			var uiStepHeight = (_uiCellPrefab.transform as RectTransform).sizeDelta.y / 2;
 
+			for (var i = 0; i < expectedGrid.Count; ++i)
+			{
+				var row = expectedGrid[i].CellsList;
+				var listOfCells = new List<UICell>();
+				var offset = 0f;
+				if (_isOffsetInFistRow)
+				{
+					if (i % 2 == 0) // has offset
+					{
+						offset += (_uiCellPrefab.transform as RectTransform).sizeDelta.x / 4;
+					}
+				}
+				else
+				{
+					if (i % 2 != 0) // has offset
+					{
+						offset += (_uiCellPrefab.transform as RectTransform).sizeDelta.x / 4;
+					}
+				}
 
-			//		var cellPostion = new Vector3(uiPrefabPosition.x + j * _stepWidth + offset, uiPrefabPosition.y - i * _stepHeight, uiPrefabPosition.z);
-			//		var cell = Instantiate(_uiCellPrefab, cellPostion, Quaternion.identity, _uiField.transform).GetComponent<Image>();
-			//		if (row[j] == CellState.HasCoin)
-			//		{
-			//			cell.color = _simpleCoinColor;
-			//		}
-			//		else
-			//		{
-			//			cell.color = _blockedCellColor;
-			//		}
+				for (var j = 0; j < row.Count; ++j)
+				{
+					var cellPostion = new Vector3(startPointX + j * uiStepWidth + offset, startPointY - i * uiStepHeight, uiPrefabPosition.z);
+					var cell = Instantiate(_uiCellPrefab, cellPostion, Quaternion.identity, _uiField.transform).GetComponent<UICell>();
+					cell.State = row[j];
+					if (row[j] == CellState.HasCoin)
+					{
+						cell.ImgaeColor = _simpleCoinColor;
+					}
+					else
+					{
+						cell.ImgaeColor = _blockedCellColor;
+					}
 
-			//		//listOfCells.Add(cell);
-			//	}
+					listOfCells.Add(cell);
+				}
 
-			//	_expectedImage.Add(listOfCells);
-			//}
+				_expectedImage.Add(listOfCells);
+			}
 
 			IndicateBlockedStates();
 		}
@@ -192,7 +211,6 @@ namespace Assets.Scripts
 		private bool IsCellActive(int y, int x, CellState expectedCellState)
 		{
 			var coordinates = GenerateAvailableCellsCoordinates(y, x);
-			Debug.Log(coordinates.Count);
 			foreach (var cellCoordinates in coordinates)
 			{
 				var currentY = cellCoordinates.Y;
@@ -281,11 +299,66 @@ namespace Assets.Scripts
 
 		public bool IsGridsEqual()
 		{
+			for (var i = 0; i < _cells.Count; ++i)
+			{
+				for (var j = 0; j < _cells[i].Count; ++j)
+				{
+					
+					if (_cells[i][j].State == CellState.HasCoin)
+					{
+						
+						return CompareGrids(i);
+					}
+				}
+			}
+
+			return false;
+		}
+
+		public bool CompareGrids(int y)
+		{
 			for (var i = 0; i < _expectedImage.Count; ++i)
 			{
-				for (var j = 0; j < _expectedImage[i].Count; ++j)
+				var offset = 0;
+				for (var j = 0; j < _expectedImage[j].Count; ++j)
 				{
+					if (_expectedImage[i][j].State != CellState.HasCoin) offset++;
+					else
+					{
+						
+						var x = 0;
+						while (_cells[y][x].State != CellState.HasCoin)
+						{
+							x++;
+						}
+						var startX = x - offset;
+						if (startX >= 0)
+						{
+							x = startX; 
+							for (var yi = 0; yi < _expectedImage.Count; ++ yi)
+							{
+								if (y >= _cells.Count) return false;
+								for (var xi = 0; xi < _expectedImage[yi].Count; ++xi)
+								{
+									//Debug.Log($"<color=green> found  {yi},{xi} : {y},{x} </color>");
+									if (x >= _cells[y].Count) return false;
+									//Debug.Log($"<color=green> Couunt true {yi},{xi} : {y},{x} </color>");
+									if (_expectedImage[yi][xi].State == CellState.HasCoin && _expectedImage[yi][xi].State != _cells[y][x].State) return false;
+									//Debug.Log($"<color=yellow> State true {yi},{xi} : {y},{x} </color>");
+									x++;
+								}
 
+								x = startX;
+								y++;
+							}
+
+							return true;
+						}
+						else
+						{
+							return false;
+						}
+					}
 				}
 			}
 
