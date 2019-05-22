@@ -9,8 +9,15 @@ namespace Assets.Scripts.Utils.LoadedObjects
 	{
 		[SerializeField] private int _maxStepsAmount;
 		[SerializeField] private int _timeLimit;
+		[SerializeField] private bool _isFistHasOffset;
 		[SerializeField] private List<CellRow> _initialGrid;
 		[SerializeField] private List<CellRow> _expectedGrid;
+
+		public bool IsFirstHasOffset
+		{
+			get => _isFistHasOffset;
+			set => _isFistHasOffset = value;
+		}
 
 		public int MaxStepsAmount
 		{

@@ -22,6 +22,8 @@ namespace Assets.Scripts.Objects
 		private Coin _catchedCoin;
 		private Cell _catchedCell;
 
+		private Vector3 _previousPosition; 
+
 		private void Awake()
 		{
 			_mainCamera = Camera.main;
@@ -52,7 +54,8 @@ namespace Assets.Scripts.Objects
 						startPosition = coin.transform.position;
 						_catchedCoin = coin;
 						_catchedCell = coin.ParentCell;
-					}	
+						_previousPosition = startPosition;
+					}
 				}
 			}
 		}
@@ -74,7 +77,6 @@ namespace Assets.Scripts.Objects
 		{
 			if (_isCoinCatched)
 			{
-				
 				_isCoinCatched = false;
 				var cell = _fieldGenerator.GetNearestCell(_catchedCoin.transform.position);
 				if (cell.State == CellState.Active)
@@ -85,7 +87,7 @@ namespace Assets.Scripts.Objects
 					_catchedCoin.ParentCell = cell;
 					_catchedCell.State = CellState.Available;
 					_catchedCell.Coin = null;
-					_fieldGenerator.IndicateBlcokedState();
+					_fieldGenerator.IndicateBlockedStates();
 				}
 				else
 				{

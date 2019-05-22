@@ -1,6 +1,7 @@
 {
     "_maxStepsAmount": 1,
     "_timeLimit": 3,
+	"_isFistHasOffset": false,
     "_initialGrid": [
         {
             "_cellsRow": [
