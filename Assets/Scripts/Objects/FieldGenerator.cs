@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Enums;
 using Assets.Scripts.UI.Interface;
+using Assets.Scripts.Utils.LoadedObjects;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,13 +45,11 @@ namespace Assets.Scripts
 		private void Awake()
 		{
 			_levelsManager.LoadLevels();
-			CreateField(_levelNumber);
 		}
 
-		public void CreateField(int level)
+		public LevelData CreateField(int level)
 		{
 			var levelData = _levelsManager.Levels[level];
-			_levelManager.CurrLevelData = levelData;
 			var dataGrid = levelData.InitialGrid;
 			_isOffsetInFistRow = levelData.IsFirstHasOffset;
 
@@ -146,6 +145,39 @@ namespace Assets.Scripts
 			}
 
 			IndicateBlockedStates();
+
+			return levelData;
+		}
+
+		public void ClearField()
+		{
+			// cleare GamePlay Field
+			for (var i = 0; i < _cells.Count; ++i)
+			{
+				for (var j = 0; j < _cells[i].Count; ++j)
+				{
+					var coin = _cells[i][j].Coin?.gameObject;
+					if (coin != null)
+					{
+						Destroy(coin);
+					}
+
+					Destroy(_cells[i][j].gameObject);
+				}
+			}
+
+			_cells.Clear();
+
+			// claer UI Image
+			for (var i = 0; i < _expectedImage.Count; ++i)
+			{
+				for (var j = 0; j < _expectedImage[i].Count; ++j)
+				{
+					Destroy(_expectedImage[i][j].gameObject);
+				}
+			}
+
+			_expectedImage.Clear();
 		}
 
 		public void IndicateBlockedStates()

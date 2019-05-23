@@ -1,5 +1,5 @@
 {
-    "_maxStepsAmount": 1,
+    "_maxStepsAmount": 4,
     "_timeLimit": 3,
 	"_isFistHasOffset": false,
     "_initialGrid": [
@@ -16,17 +16,18 @@
             ]
         }
     ],
+	"_isFistImagRowHasOffset": false,
     "_expectedGrid": [
         {
             "_cellsRow": [
-                3,
-                2
+                2,
+                3
             ]
         },
         {
             "_cellsRow": [
-                3,
-                2
+                2,
+                3
             ]
         }
     ]

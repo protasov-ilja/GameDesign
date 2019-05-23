@@ -29,6 +29,8 @@ namespace Assets.Scripts.Objects
 		private int _maxStepsCount = 0;
 		private int _currentStepsCount = 0;
 		private bool _isGameEnd = false;
+		private bool _isGameOnPouse = false;
+		private int _currentLevel = 0;
 
 		public event Action<int, int> CounterUpdated;
 		public event Action GameWon;
@@ -42,11 +44,26 @@ namespace Assets.Scripts.Objects
 			_playerController.TouchEnd += EndDragin;
 		}
 
-		private void Start()
+		public void StartLevel(int level)
 		{
+			_isGameEnd = false;
+			_isGameOnPouse = false;
+			_currentLevel = level;
+			CurrLevelData = _fieldGenerator.CreateField(level);
 			_maxStepsCount = CurrLevelData.MaxStepsAmount;
 			_currentStepsCount = 0;
 			CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
+		}
+
+		public void EndLevel()
+		{
+			_isGameEnd = true;
+			_isGameOnPouse = true;
+			_fieldGenerator.ClearField();
+			_currentStepsCount = 0;
+			_maxStepsCount = 0;
+			CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
+			CurrLevelData = null;
 		}
 
 		public void LinkToUI(IInterface displayer)
@@ -54,6 +71,26 @@ namespace Assets.Scripts.Objects
 			CounterUpdated += displayer.UpdateStepsCounter;
 			GameWon += displayer.ShowWonPanel;
 			GameOver += displayer.ShowGameOverPanel;
+			displayer.PousePressed += SetGameOnPause;
+			displayer.RestartGamePressed += RestartGame;
+			displayer.EndGamePressed += EndLevel;
+			displayer.PouseReleased += SetGameOnPlay;
+		}
+
+		private void RestartGame()
+		{
+			EndLevel();
+			StartLevel(_currentLevel);
+		}
+
+		private void SetGameOnPause()
+		{
+			_isGameOnPouse = true;
+		}
+
+		private void SetGameOnPlay()
+		{
+			_isGameOnPouse = false;
 		}
 
 		public void CreateLevel(LevelData data)
@@ -63,7 +100,7 @@ namespace Assets.Scripts.Objects
 
 		public void StartDraging(Vector3 position)
 		{
-			if (_isGameEnd) return;
+			if (_isGameEnd || _isGameOnPouse) return;
 
 			startPosition = _mainCamera.ScreenToWorldPoint(position);
 

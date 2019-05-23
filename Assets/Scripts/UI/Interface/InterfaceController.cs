@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts.UI.Interface;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InterfaceController : MonoBehaviour, IInterface
 {
@@ -18,15 +16,51 @@ public class InterfaceController : MonoBehaviour, IInterface
 	#region Private Fields
 	#endregion
 
-	#region Public Fields
-	#endregion
+	public event Action PousePressed;
+	public event Action RestartGamePressed;
+	public event Action EndGamePressed;
+	public event Action PouseReleased;
+	public event Action LoadNextLevelPressed;
 
 	#region Unity Methods
 	#endregion
 
 	#region Public Methods
+
+	public void PressLoadNextLevel()
+	{
+		LoadNextLevelPressed?.Invoke();
+		_wonPanel.SetActive(false);
+		_losePanel.SetActive(false);
+		_pausePanel.SetActive(false);
+	}
+
+	public void PressRestartButton()
+	{
+		RestartGamePressed?.Invoke();
+		_wonPanel.SetActive(false);
+		_losePanel.SetActive(false);
+		_pausePanel.SetActive(false);
+	}
+
+	public void PressEndGameButton()
+	{
+		EndGamePressed?.Invoke();
+		_wonPanel.SetActive(false);
+		_losePanel.SetActive(false);
+		_pausePanel.SetActive(false);
+		gameObject.SetActive(false);
+	}
+
+	public void PressReturnToGameButton()
+	{
+		PouseReleased?.Invoke();
+		_pausePanel.SetActive(false);
+	}
+
 	public void PressPauseButton()
 	{
+		PousePressed?.Invoke();
 		_pausePanel.SetActive(true);
 	}
 

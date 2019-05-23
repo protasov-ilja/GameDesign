@@ -23,6 +23,13 @@ public class UIManager : MonoBehaviour
 	#endregion
 
 	#region Unity Methods
+
+	public LevelsMenu LevelsMenu => _levelsMenu;
+
+	public MainMenu MainMenu => _mainMenu;
+
+	public InterfaceController Interface => _interfaceController;
+
 	#endregion
 
 	#region Public Methods
