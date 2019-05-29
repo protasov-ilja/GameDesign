@@ -9,6 +9,8 @@ namespace Assets.Scripts.Objects
 {
 	public sealed class LevelManager : MonoBehaviour
 	{
+		const string ProgressKey = "LevelProgress";
+
 		[SerializeField]
 		private PlayerController _playerController;
 
@@ -33,8 +35,10 @@ namespace Assets.Scripts.Objects
 		private int _currentLevel = 0;
 
 		public event Action<int, int> CounterUpdated;
-		public event Action GameWon;
-		public event Action GameOver;
+		public event Action<int> GameWon;
+		public event Action<int, int> GameOver;
+
+		private IInterface _levelDisplayer;
 
 		private void Awake()
 		{
@@ -53,6 +57,7 @@ namespace Assets.Scripts.Objects
 			_maxStepsCount = CurrLevelData.MaxStepsAmount;
 			_currentStepsCount = 0;
 			CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
+			_levelDisplayer?.SetCurrentLevel(_currentLevel);
 		}
 
 		public void EndLevel()
@@ -68,6 +73,7 @@ namespace Assets.Scripts.Objects
 
 		public void LinkToUI(IInterface displayer)
 		{
+			_levelDisplayer = displayer;
 			CounterUpdated += displayer.UpdateStepsCounter;
 			GameWon += displayer.ShowWonPanel;
 			GameOver += displayer.ShowGameOverPanel;
@@ -151,20 +157,34 @@ namespace Assets.Scripts.Objects
 					_catchedCell.State = CellState.Available;
 					_catchedCell.Coin = null;
 					_fieldGenerator.IndicateBlockedStates();
-					if (_fieldGenerator.IsGridsEqual())
+					_currentStepsCount++;
+					if ((_currentStepsCount <= _maxStepsCount) && _fieldGenerator.IsGridsEqual())
 					{
-						GameWon?.Invoke();
+						var progress = GetCalculatedScore();
+						PlayerPrefs.SetInt($"{ProgressKey}{_currentLevel}", progress);
+						var score = PlayerPrefs.GetInt($"curentScore", 0);
+						var newScore = score + progress;
+						PlayerPrefs.SetInt($"curentScore", newScore);
+						
+						GameWon?.Invoke(progress);
 						_isGameEnd = true;
 					}
-
-					if (_maxStepsCount <= _currentStepsCount)
+					else if (_currentStepsCount > _maxStepsCount)
 					{
-						GameOver?.Invoke();
+						var score = PlayerPrefs.GetInt($"curentScore", 0);
+						var bestScore = PlayerPrefs.GetInt($"bestScore", 0);
+						if (score > bestScore)
+						{
+							PlayerPrefs.SetInt($"bestScore", score);
+						}
+
+						PlayerPrefs.SetInt($"curentScore", 0);
+
+						GameOver?.Invoke(score, bestScore);
 						_isGameEnd = true;
 					}
 					else
 					{
-						_currentStepsCount++;
 						CounterUpdated?.Invoke(_maxStepsCount, _currentStepsCount);
 					}
 				}
@@ -175,6 +195,20 @@ namespace Assets.Scripts.Objects
 
 				_catchedCoin = null;
 			}
+		}
+
+		private int GetCalculatedScore()
+		{
+			if (_maxStepsCount == _currentStepsCount)
+			{
+				return 1;
+			}
+			else if (_maxStepsCount - 1 == _currentStepsCount)
+			{
+				return 2;
+			}
+
+			return 3;
 		}
 	}
 }

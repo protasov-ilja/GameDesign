@@ -1,0 +1,34 @@
+{
+    "_maxStepsAmount": 4,
+    "_timeLimit": 3,
+	"_isFistHasOffset": false,
+    "_initialGrid": [
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        },
+        {
+            "_cellsRow": [
+                3,
+                2
+            ]
+        }
+    ],
+	"_isFistImagRowHasOffset": false,
+    "_expectedGrid": [
+        {
+            "_cellsRow": [
+                2,
+                3
+            ]
+        },
+        {
+            "_cellsRow": [
+                2,
+                3
+            ]
+        }
+    ]
+}

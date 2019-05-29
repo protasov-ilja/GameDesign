@@ -24,6 +24,14 @@ public class LevelsMenu : MonoBehaviour
 		}
 	}
 
+	public void UpdateState()
+	{
+		for (var i = 0; i < _panels.Count; ++i)
+		{
+			_panels[i].UpdateState();
+		}
+	}
+
 	#endregion
 
 	#region Unity Methods

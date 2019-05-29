@@ -1,18 +1,42 @@
 {
-    "_maxStepsAmount": 4,
-    "_timeLimit": 3,
+    "_maxStepsAmount": 7,
+    "_timeLimit": 100,
 	"_isFistHasOffset": false,
     "_initialGrid": [
         {
             "_cellsRow": [
-                3,
-                2
+                1,
+				1,
+				1,
+				1,
+				1
             ]
         },
-        {
-            "_cellsRow": [
-                3,
-                2
+		{
+             "_cellsRow": [
+                1,
+				3,
+				3,
+				3,
+				1
+            ]
+        },
+		{
+             "_cellsRow": [
+                1,
+				3,
+				3,
+				3,
+				1
+            ]
+        },
+		{
+             "_cellsRow": [
+                1,
+				1,
+				1,
+				1,
+				1
             ]
         }
     ],
@@ -20,14 +44,30 @@
     "_expectedGrid": [
         {
             "_cellsRow": [
-                2,
-                3
+				1,
+				3,
+				1
             ]
         },
-        {
-            "_cellsRow": [
-                2,
-                3
+		{
+             "_cellsRow": [
+				3,
+				1,
+				3
+            ]
+        },
+		{
+             "_cellsRow": [
+				3,
+				3,
+				3
+            ]
+        },
+		{
+             "_cellsRow": [
+				1,
+				1,
+				1
             ]
         }
     ]

@@ -29,7 +29,6 @@ namespace Assers.Scripts
 			_levelManager.LinkToUI(_uIManager.Interface);
 			_uIManager.Interface.LoadNextLevelPressed += LoadNextLevel;
 			_uIManager.MainMenu.StartGameButtonPressed += StartGame;
-			//DataSaver.DataSave(1);
 		}
 		#endregion
 
@@ -37,6 +36,7 @@ namespace Assers.Scripts
 		public void StartLevel(int level)
 		{
 			_currentLevel = level;
+			_uIManager.LevelsMenu.UpdateState();
 			_levelManager.StartLevel(level);
 		}
 
