@@ -3,6 +3,7 @@ using Assets.Scripts.Objects.Enums;
 using Assets.Scripts.UI.Interface;
 using Assets.Scripts.Utils.LoadedObjects;
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace Assets.Scripts.Objects
@@ -165,9 +166,9 @@ namespace Assets.Scripts.Objects
 						var score = PlayerPrefs.GetInt($"curentScore", 0);
 						var newScore = score + progress;
 						PlayerPrefs.SetInt($"curentScore", newScore);
-						
-						GameWon?.Invoke(progress);
 						_isGameEnd = true;
+						GameWon?.Invoke(progress);
+						
 					}
 					else if (_currentStepsCount > _maxStepsCount)
 					{

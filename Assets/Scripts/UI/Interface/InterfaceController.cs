@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.UI.Interface;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -87,6 +88,7 @@ public class InterfaceController : MonoBehaviour, IInterface
 
 	public void ShowWonPanel(int score)
 	{
+		Thread.Sleep(800);
 		_wonPanel.SetActive(true);
 		_scoreText.text = score.ToString();
 
